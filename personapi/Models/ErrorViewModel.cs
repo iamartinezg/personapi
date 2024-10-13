@@ -1,4 +1,4 @@
-namespace personapi.Models
+namespace personapi_dotnet.Models
 {
     public class ErrorViewModel
     {
