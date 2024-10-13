@@ -72,31 +72,31 @@ http://localhost:5000/swagger/index.html
 Aquí podrás ver la documentación de la API y probar los diferentes endpoints.
 
 #### Endpoints disponibles
-Personas
-GET /api/persona - Obtiene todas las personas.
-GET /api/persona/{cc} - Obtiene una persona por cédula.
-POST /api/persona - Crea una nueva persona.
-PUT /api/persona/{cc} - Actualiza una persona.
-DELETE /api/persona/{cc} - Elimina una persona.
-Profesiones
-GET /api/profesion - Obtiene todas las profesiones.
-GET /api/profesion/{id} - Obtiene una profesión por ID.
-POST /api/profesion - Crea una nueva profesión.
-PUT /api/profesion/{id} - Actualiza una profesión.
-DELETE /api/profesion/{id} - Elimina una profesión.
-Estudios
-GET /api/estudios - Obtiene todos los estudios.
-GET /api/estudios/{id_prof}/{cc_per} - Obtiene un estudio por profesión y persona.
-POST /api/estudios - Crea un nuevo estudio.
-PUT /api/estudios/{id_prof}/{cc_per} - Actualiza un estudio.
-DELETE /api/estudios/{id_prof}/{cc_per} - Elimina un estudio.
-Teléfonos
-GET /api/telefono - Obtiene todos los teléfonos.
-GET /api/telefono/{num} - Obtiene un teléfono por número.
-POST /api/telefono - Crea un nuevo teléfono.
-PUT /api/telefono/{num} - Actualiza un teléfono.
-DELETE /api/telefono/{num} - Elimina un teléfono.
-Pruebas de la API
+##### Personas
+- GET /api/persona - Obtiene todas las personas.
+- GET /api/persona/{cc} - Obtiene una persona por cédula.
+- POST /api/persona - Crea una nueva persona.
+- PUT /api/persona/{cc} - Actualiza una persona.
+- DELETE /api/persona/{cc} - Elimina una persona.
+- Profesiones
+- GET /api/profesion - Obtiene todas las profesiones.
+- GET /api/profesion/{id} - Obtiene una profesión por ID.
+- POST /api/profesion - Crea una nueva profesión.
+- PUT /api/profesion/{id} - Actualiza una profesión.
+- DELETE /api/profesion/{id} - Elimina una profesión.
+##### Estudios
+- GET /api/estudios - Obtiene todos los estudios.
+- GET /api/estudios/{id_prof}/{cc_per} - Obtiene un estudio por profesión y persona.
+- POST /api/estudios - Crea un nuevo estudio.
+- PUT /api/estudios/{id_prof}/{cc_per} - Actualiza un estudio.
+- DELETE /api/estudios/{id_prof}/{cc_per} - Elimina un estudio.
+##### Teléfonos
+- GET /api/telefono - Obtiene todos los teléfonos.
+- GET /api/telefono/{num} - Obtiene un teléfono por número.
+- POST /api/telefono - Crea un nuevo teléfono.
+- PUT /api/telefono/{num} - Actualiza un teléfono.
+- DELETE /api/telefono/{num} - Elimina un teléfono.
+#### Pruebas de la API
 Puedes probar los endpoints utilizando Postman o Swagger.
 
 Ejemplo de una solicitud POST para crear una persona en Postman:
