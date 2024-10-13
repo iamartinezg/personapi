@@ -1,4 +1,19 @@
+using personapi_dotnet.Models.Repositories.Interfaces;
+using personapi_dotnet.Models.Repositories;
+using Microsoft.EntityFrameworkCore;
+using personapi_dotnet.Models.Entities;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Configurar el DbContext
+builder.Services.AddDbContext<MasterContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Registrar los repositorios
+builder.Services.AddScoped<IEstudiosRepository, EstudiosRepository>();
+builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
+builder.Services.AddScoped<IProfesionRepository, ProfesionRepository>();
+builder.Services.AddScoped<ITelefonoRepository, TelefonoRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -13,7 +28,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

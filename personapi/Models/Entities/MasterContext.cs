@@ -19,7 +19,7 @@ public partial class MasterContext : DbContext
 
     public virtual DbSet<Persona> Personas { get; set; }
 
-    public virtual DbSet<Profesion> Profesions { get; set; }
+    public virtual DbSet<Profesion> Profesiones { get; set; }
 
     public virtual DbSet<Telefono> Telefonos { get; set; }
 
@@ -29,32 +29,36 @@ public partial class MasterContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         modelBuilder.Entity<Estudios>(entity =>
         {
-            entity.HasKey(e => new { e.IdProf, e.CcPer }).HasName("PK__estudios__FB3F71A6E06FB4E6");
+            entity.HasKey(e => new { e.IdProf, e.CcPer }).HasName("PK_Estudios");
 
             entity.ToTable("estudios");
 
             entity.Property(e => e.IdProf).HasColumnName("id_prof");
             entity.Property(e => e.CcPer).HasColumnName("cc_per");
             entity.Property(e => e.Fecha).HasColumnName("fecha");
-            entity.Property(e => e.Univer)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("univer");
+            entity.Property(e => e.Univer).HasColumnName("univer");
 
-            entity.HasOne(d => d.CcPerNavigation).WithMany(p => p.Estudios)
+            // Mapeo correcto de las claves foráneas
+            entity.HasOne(d => d.CcPerNavigation)
+                .WithMany(p => p.Estudios)
                 .HasForeignKey(d => d.CcPer)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_persona");
 
-            entity.HasOne(d => d.IdProfNavigation).WithMany(p => p.Estudios)
+            entity.HasOne(d => d.IdProfNavigation)
+                .WithMany(p => p.Estudios)
                 .HasForeignKey(d => d.IdProf)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_profesion");
         });
 
-        modelBuilder.Entity<Persona>(entity =>
+        
+    
+
+    modelBuilder.Entity<Persona>(entity =>
         {
             entity.HasKey(e => e.Cc).HasName("PK__persona__3213666D3B29F730");
 
@@ -113,9 +117,6 @@ public partial class MasterContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("oper");
 
-            entity.HasOne(d => d.DuenioNavigation).WithMany(p => p.Telefonos)
-                .HasForeignKey(d => d.Duenio)
-                .HasConstraintName("fk_duenio");
         });
 
         OnModelCreatingPartial(modelBuilder);

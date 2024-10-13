@@ -1,14 +1,49 @@
-﻿using personapi_dotnet.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using personapi_dotnet.Models.Entities;
+using personapi_dotnet.Models.Repositories.Interfaces;
 
 namespace personapi_dotnet.Models.Repositories
 {
-    public interface ITelefonoRepository
+    public class TelefonoRepository : ITelefonoRepository
     {
-        Task<IEnumerable<Telefono>> GetAllTelefonos();
-        Task<Telefono> GetTelefonoById(string num);
-        Task AddTelefono(Telefono telefono);
-        Task UpdateTelefono(Telefono telefono);
-        Task DeleteTelefono(string num);
+        private readonly MasterContext _context;
+
+        public TelefonoRepository(MasterContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<Telefono>> GetAllTelefonos()
+        {
+            return await _context.Telefonos.ToListAsync();
+        }
+
+        public async Task<Telefono> GetTelefonoById(string num)
+        {
+            return await _context.Telefonos.FindAsync(num);
+        }
+
+        public async Task AddTelefono(Telefono telefono)
+        {
+            _context.Telefonos.Add(telefono);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateTelefono(Telefono telefono)
+        {
+            _context.Entry(telefono).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteTelefono(string num)
+        {
+            var telefono = await _context.Telefonos.FindAsync(num);
+            if (telefono != null)
+            {
+                _context.Telefonos.Remove(telefono);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 
 }

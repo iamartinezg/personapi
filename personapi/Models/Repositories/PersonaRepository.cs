@@ -6,9 +6,9 @@ namespace personapi_dotnet.Models.Repositories
 {
     public class PersonaRepository : IPersonaRepository
     {
-        private readonly DbContext _context;
+        private readonly MasterContext _context;
 
-        public PersonaRepository(DbContext context)
+        public PersonaRepository(MasterContext context)
         {
             _context = context;
         }

@@ -6,9 +6,9 @@ namespace personapi_dotnet.Models.Repositories
 {
     public class EstudiosRepository : IEstudiosRepository
     {
-        private readonly DbContext _context;
+        private readonly MasterContext _context;
 
-        public EstudiosRepository(DbContext context)
+        public EstudiosRepository(MasterContext context)
         {
             _context = context;
         }
