@@ -78,7 +78,7 @@ Aquí podrás ver la documentación de la API y probar los diferentes endpoints.
 - POST /api/persona - Crea una nueva persona.
 - PUT /api/persona/{cc} - Actualiza una persona.
 - DELETE /api/persona/{cc} - Elimina una persona.
-- Profesiones
+##### Profesiones
 - GET /api/profesion - Obtiene todas las profesiones.
 - GET /api/profesion/{id} - Obtiene una profesión por ID.
 - POST /api/profesion - Crea una nueva profesión.
