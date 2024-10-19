@@ -1,36 +1,22 @@
-# Usa la imagen base de ASP.NET para la fase de ejecución
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+# Usar la imagen base de .NET SDK para compilar la aplicaci贸n
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
 
-# Usa la imagen del SDK de .NET para la fase de compilación
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+# Copiar el archivo de proyecto y restaurar dependencias
+COPY *.csproj ./
+RUN dotnet restore
 
-# Copia el archivo de proyecto y restaura las dependencias
-COPY ["personapi/personapi.csproj", "personapi/"]
-RUN dotnet restore "personapi/personapi.csproj"
-
-# Copia el resto del código fuente y compílalo
+# Copiar el resto de la aplicaci贸n y compilarla
 COPY . .
-WORKDIR "/src/personapi"
-RUN dotnet build "personapi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet publish -c Release -o out
 
-# Publica el proyecto en la carpeta /app/publish
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "personapi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-# Usa la imagen base de ASP.NET para la fase final de ejecución
-FROM base AS final
+# Usar la imagen base de .NET runtime para ejecutar la aplicaci贸n
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/out .
 
-# Configuración del entorno para que la aplicación escuche en el puerto 8080
-ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT=Development
+# Exponer el puerto por defecto del contenedor
+EXPOSE 80
 
-# Comando para iniciar la aplicación
-ENTRYPOINT ["dotnet", "personapi.dll"]
+# Comando para ejecutar la aplicaci贸n
+ENTRYPOINT ["dotnet", "personapi-dotnet.dll"]

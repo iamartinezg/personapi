@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Servicio para la base de datos SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    environment:
+      - SA_PASSWORD=YourStrongPassword123!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+    networks:
+      - backend
+
+  # Servicio para la aplicación ASP.NET Core
+  personapi:
+    image: personapi-dotnet
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: personapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=master;User=sa;Password=YourStrongPassword123!
+    ports:
+      - "5000:80"
+    depends_on:
+      - sqlserver
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  sqlserverdata:
