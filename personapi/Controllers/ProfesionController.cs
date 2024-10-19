@@ -4,9 +4,8 @@ using personapi_dotnet.Models.Entities;
 
 namespace personapi_dotnet.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProfesionController : ControllerBase
+    [Route("[controller]")]
+    public class ProfesionController : Controller
     {
         private readonly IProfesionRepository _profesionRepository;
 
@@ -15,44 +14,87 @@ namespace personapi_dotnet.Controllers
             _profesionRepository = profesionRepository;
         }
 
+        // GET: Profesion
         [HttpGet]
-        public async Task<IActionResult> GetProfesiones()
+        public async Task<IActionResult> Index()
         {
             var profesiones = await _profesionRepository.GetAllProfesiones();
-            return Ok(profesiones);
+            return View(profesiones);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetProfesionById(int id)
+        // GET: Profesion/Details/{id}
+        [HttpGet("Details/{id}")]
+        public async Task<IActionResult> Details(int id)
         {
             var profesion = await _profesionRepository.GetProfesionById(id);
             if (profesion == null)
                 return NotFound();
-            return Ok(profesion);
+            return View(profesion);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddProfesion([FromBody] Profesion profesion)
+        // GET: Profesion/Create
+        [HttpGet("Create")]
+        public IActionResult Create()
         {
-            await _profesionRepository.AddProfesion(profesion);
-            return CreatedAtAction(nameof(GetProfesionById), new { id = profesion.Id }, profesion);
+            return View();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProfesion(int id, [FromBody] Profesion profesion)
+        // POST: Profesion/Create
+        [HttpPost("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Profesion profesion)
+        {
+            if (ModelState.IsValid)
+            {
+                await _profesionRepository.AddProfesion(profesion);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(profesion);
+        }
+
+        // GET: Profesion/Edit/{id}
+        [HttpGet("Edit/{id}")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var profesion = await _profesionRepository.GetProfesionById(id);
+            if (profesion == null)
+                return NotFound();
+            return View(profesion);
+        }
+
+        // POST: Profesion/Edit/{id}
+        [HttpPost("Edit/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Profesion profesion)
         {
             if (id != profesion.Id)
                 return BadRequest();
-            await _profesionRepository.UpdateProfesion(profesion);
-            return NoContent();
+
+            if (ModelState.IsValid)
+            {
+                await _profesionRepository.UpdateProfesion(profesion);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(profesion);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProfesion(int id)
+        // GET: Profesion/Delete/{id}
+        [HttpGet("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var profesion = await _profesionRepository.GetProfesionById(id);
+            if (profesion == null)
+                return NotFound();
+            return View(profesion);
+        }
+
+        // POST: Profesion/Delete/{id}
+        [HttpPost("Delete/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _profesionRepository.DeleteProfesion(id);
-            return NoContent();
+            return RedirectToAction(nameof(Index));
         }
     }
-
 }

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<personapi_dotnet.Models.Entities.Telefono>
+
+<h2>Lista de Teléfonos</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Número</th>
+            <th>Operador</th>
+            <th>Dueño (CC)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var telefono in Model)
+        {
+            <tr>
+                <td>@telefono.Num</td>
+                <td>@telefono.Oper</td>
+                <td>@telefono.Duenio</td>
+                <td>
+                    <a href="/Telefono/Edit/@telefono.Num" class="btn btn-primary">Editar</a>
+                    <a href="/Telefono/Delete/@telefono.Num" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Telefono/Create" class="btn btn-success">Agregar Teléfono</a>

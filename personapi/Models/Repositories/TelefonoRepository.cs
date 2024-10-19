@@ -44,6 +44,13 @@ namespace personapi_dotnet.Models.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-    }
 
+        // Implementar el método para obtener teléfonos por dueño
+        public async Task<IEnumerable<Telefono>> GetTelefonosByDuenio(int duenioId)
+        {
+            return await _context.Telefonos
+                                 .Where(t => t.Duenio == duenioId)
+                                 .ToListAsync();
+        }
+    }
 }

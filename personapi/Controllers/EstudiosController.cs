@@ -4,9 +4,8 @@ using personapi_dotnet.Models.Entities;
 
 namespace personapi_dotnet.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class EstudiosController : ControllerBase
+    [Route("[controller]")]
+    public class EstudiosController : Controller
     {
         private readonly IEstudiosRepository _estudiosRepository;
 
@@ -15,44 +14,87 @@ namespace personapi_dotnet.Controllers
             _estudiosRepository = estudiosRepository;
         }
 
+        // GET: Estudios
         [HttpGet]
-        public async Task<IActionResult> GetEstudios()
+        public async Task<IActionResult> Index()
         {
             var estudios = await _estudiosRepository.GetAllEstudios();
-            return Ok(estudios);
+            return View(estudios);
         }
 
-        [HttpGet("{id_prof}/{cc_per}")]
-        public async Task<IActionResult> GetEstudiosById(int id_prof, int cc_per)
+        // GET: Estudios/Details/{id_prof}/{cc_per}
+        [HttpGet("Details/{id_prof}/{cc_per}")]
+        public async Task<IActionResult> Details(int id_prof, int cc_per)
         {
             var estudios = await _estudiosRepository.GetEstudiosById(id_prof, cc_per);
             if (estudios == null)
                 return NotFound();
-            return Ok(estudios);
+            return View(estudios);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddEstudios([FromBody] Estudios estudios)
+        // GET: Estudios/Create
+        [HttpGet("Create")]
+        public IActionResult Create()
         {
-            await _estudiosRepository.AddEstudios(estudios);
-            return CreatedAtAction(nameof(GetEstudiosById), new { id_prof = estudios.IdProf, cc_per = estudios.CcPer }, estudios);
+            return View();
         }
 
-        [HttpPut("{id_prof}/{cc_per}")]
-        public async Task<IActionResult> UpdateEstudios(int id_prof, int cc_per, [FromBody] Estudios estudios)
+        // POST: Estudios/Create
+        [HttpPost("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromForm] Estudios estudios)
+        {
+            if (ModelState.IsValid)
+            {
+                await _estudiosRepository.AddEstudios(estudios);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(estudios);
+        }
+
+        // GET: Estudios/Edit/{id_prof}/{cc_per}
+        [HttpGet("Edit/{id_prof}/{cc_per}")]
+        public async Task<IActionResult> Edit(int id_prof, int cc_per)
+        {
+            var estudios = await _estudiosRepository.GetEstudiosById(id_prof, cc_per);
+            if (estudios == null)
+                return NotFound();
+            return View(estudios);
+        }
+
+        // POST: Estudios/Edit/{id_prof}/{cc_per}
+        [HttpPost("Edit/{id_prof}/{cc_per}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id_prof, int cc_per, Estudios estudios)
         {
             if (id_prof != estudios.IdProf || cc_per != estudios.CcPer)
                 return BadRequest();
-            await _estudiosRepository.UpdateEstudios(estudios);
-            return NoContent();
+
+            if (ModelState.IsValid)
+            {
+                await _estudiosRepository.UpdateEstudios(estudios);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(estudios);
         }
 
-        [HttpDelete("{id_prof}/{cc_per}")]
-        public async Task<IActionResult> DeleteEstudios(int id_prof, int cc_per)
+        // GET: Estudios/Delete/{id_prof}/{cc_per}
+        [HttpGet("Delete/{id_prof}/{cc_per}")]
+        public async Task<IActionResult> Delete(int id_prof, int cc_per)
+        {
+            var estudios = await _estudiosRepository.GetEstudiosById(id_prof, cc_per);
+            if (estudios == null)
+                return NotFound();
+            return View(estudios);
+        }
+
+        // POST: Estudios/Delete/{id_prof}/{cc_per}
+        [HttpPost("Delete/{id_prof}/{cc_per}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id_prof, int cc_per)
         {
             await _estudiosRepository.DeleteEstudios(id_prof, cc_per);
-            return NoContent();
+            return RedirectToAction(nameof(Index));
         }
     }
-
 }

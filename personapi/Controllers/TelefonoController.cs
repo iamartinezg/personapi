@@ -4,9 +4,8 @@ using personapi_dotnet.Models.Entities;
 
 namespace personapi_dotnet.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TelefonoController : ControllerBase
+    [Route("[controller]")]
+    public class TelefonoController : Controller
     {
         private readonly ITelefonoRepository _telefonoRepository;
 
@@ -15,44 +14,93 @@ namespace personapi_dotnet.Controllers
             _telefonoRepository = telefonoRepository;
         }
 
+        // GET: Telefono
         [HttpGet]
-        public async Task<IActionResult> GetTelefonos()
+        public async Task<IActionResult> Index()
         {
             var telefonos = await _telefonoRepository.GetAllTelefonos();
-            return Ok(telefonos);
+            return View(telefonos);
         }
 
-        [HttpGet("{num}")]
-        public async Task<IActionResult> GetTelefonoById(string num)
+        // GET: Telefono/Details/{num}
+        [HttpGet("Details/{num}")]
+        public async Task<IActionResult> Details(string num)
         {
             var telefono = await _telefonoRepository.GetTelefonoById(num);
             if (telefono == null)
                 return NotFound();
-            return Ok(telefono);
+            return View(telefono);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddTelefono([FromBody] Telefono telefono)
+        // GET: Telefono/Create
+        [HttpGet("Create")]
+        public IActionResult Create()
         {
-            await _telefonoRepository.AddTelefono(telefono);
-            return CreatedAtAction(nameof(GetTelefonoById), new { num = telefono.Num }, telefono);
+            return View();
         }
 
-        [HttpPut("{num}")]
-        public async Task<IActionResult> UpdateTelefono(string num, [FromBody] Telefono telefono)
+        // POST: Telefono/Create
+        [HttpPost("Create")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Telefono telefono)
+        {
+            if (ModelState.IsValid)
+            {
+                await _telefonoRepository.AddTelefono(telefono);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(telefono);
+        }
+
+        // GET: Telefono/Edit/{num}
+        [HttpGet("Edit/{num}")]
+        public async Task<IActionResult> Edit(string num)
+        {
+            var telefono = await _telefonoRepository.GetTelefonoById(num);
+            if (telefono == null)
+                return NotFound();
+            return View(telefono);
+        }
+
+        // POST: Telefono/Edit/{num}
+        [HttpPost("Edit/{num}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string num, Telefono telefono)
         {
             if (num != telefono.Num)
                 return BadRequest();
-            await _telefonoRepository.UpdateTelefono(telefono);
-            return NoContent();
+
+            if (ModelState.IsValid)
+            {
+                await _telefonoRepository.UpdateTelefono(telefono);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(telefono);
         }
 
-        [HttpDelete("{num}")]
-        public async Task<IActionResult> DeleteTelefono(string num)
+        // GET: Telefono/Delete/{num}
+        [HttpGet("Delete/{num}")]
+        public async Task<IActionResult> Delete(string num)
         {
+            var telefono = await _telefonoRepository.GetTelefonoById(num);
+            if (telefono == null)
+                return NotFound();
+            return View(telefono);
+        }
+
+        // POST: Telefono/Delete/{num}
+        [HttpPost("Delete/{num}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string num)
+        {
+            var telefono = await _telefonoRepository.GetTelefonoById(num);
+            if (telefono == null)
+            {
+                return NotFound();
+            }
+
             await _telefonoRepository.DeleteTelefono(num);
-            return NoContent();
+            return RedirectToAction(nameof(Index));
         }
     }
-
 }

@@ -1,30 +1,36 @@
-# Consulte https://aka.ms/customizecontainer para aprender a personalizar su contenedor de depuración y cómo Visual Studio usa este Dockerfile para compilar sus imágenes para una depuración más rápida.
-
-# Esta fase se usa cuando se ejecuta desde VS en modo rápido (valor predeterminado para la configuración de depuración)
+# Usa la imagen base de ASP.NET para la fase de ejecución
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
-# Esta fase se usa para compilar el proyecto de servicio
+# Usa la imagen del SDK de .NET para la fase de compilación
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+# Copia el archivo de proyecto y restaura las dependencias
 COPY ["personapi/personapi.csproj", "personapi/"]
-RUN dotnet restore "./personapi/personapi.csproj"
+RUN dotnet restore "personapi/personapi.csproj"
+
+# Copia el resto del código fuente y compílalo
 COPY . .
 WORKDIR "/src/personapi"
-RUN dotnet build "./personapi.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "personapi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Esta fase se usa para publicar el proyecto de servicio que se copiará en la fase final.
+# Publica el proyecto en la carpeta /app/publish
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./personapi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "personapi.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Esta fase se usa en producción o cuando se ejecuta desde VS en modo normal (valor predeterminado cuando no se usa la configuración de depuración)
+# Usa la imagen base de ASP.NET para la fase final de ejecución
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Configuración del entorno para que la aplicación escuche en el puerto 8080
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+# Comando para iniciar la aplicación
 ENTRYPOINT ["dotnet", "personapi.dll"]

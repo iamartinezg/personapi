@@ -1,0 +1,30 @@
+﻿@model IEnumerable<personapi_dotnet.Models.Entities.Profesion>
+
+<h2>Lista de Profesiones</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profesion in Model)
+        {
+            <tr>
+                <td>@profesion.Id</td>
+                <td>@profesion.Nom</td>
+                <td>@profesion.Des</td>
+                <td>
+                    <a href="/Profesion/Edit/@profesion.Id" class="btn btn-primary">Editar</a>
+                    <a href="/Profesion/Delete/@profesion.Id" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Profesion/Create" class="btn btn-success">Agregar Profesión</a>

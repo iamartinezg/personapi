@@ -9,6 +9,7 @@ namespace personapi_dotnet.Models.Repositories.Interfaces
         Task AddTelefono(Telefono telefono);
         Task UpdateTelefono(Telefono telefono);
         Task DeleteTelefono(string num);
+        Task<IEnumerable<Telefono>> GetTelefonosByDuenio(int duenioId);
     }
 
 }

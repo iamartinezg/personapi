@@ -9,7 +9,7 @@ public partial class Estudios
 
     public int CcPer { get; set; }
 
-    public DateOnly? Fecha { get; set; }
+    public DateTime? Fecha { get; set; }
 
     public string? Univer { get; set; }
 

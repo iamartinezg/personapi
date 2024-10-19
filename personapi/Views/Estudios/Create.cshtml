@@ -1,0 +1,38 @@
+﻿@model personapi_dotnet.Models.Entities.Estudios
+
+@{
+    ViewData["Title"] = "Crear Estudio";
+}
+
+<h2>Crear Estudio</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="IdProf" class="control-label"></label>
+        <input asp-for="IdProf" class="form-control" />
+        <span asp-validation-for="IdProf" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CcPer" class="control-label"></label>
+        <input asp-for="CcPer" class="form-control" />
+        <span asp-validation-for="CcPer" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Fecha" class="control-label"></label>
+        <input asp-for="Fecha" class="form-control" type="date" />
+        <span asp-validation-for="Fecha" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Univer" class="control-label"></label>
+        <input asp-for="Univer" class="form-control" />
+        <span asp-validation-for="Univer" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Crear</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

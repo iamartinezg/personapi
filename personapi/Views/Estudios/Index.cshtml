@@ -1,0 +1,32 @@
+﻿@model IEnumerable<personapi_dotnet.Models.Entities.Estudios>
+
+<h2>Lista de Estudios</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id Profesión</th>
+            <th>Cédula Persona</th>
+            <th>Fecha</th>
+            <th>Universidad</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var estudio in Model)
+        {
+            <tr>
+                <td>@estudio.IdProf</td>
+                <td>@estudio.CcPer</td>
+                <td>@estudio.Fecha?.ToString("yyyy-MM-dd")</td>
+                <td>@estudio.Univer</td>
+                <td>
+                    <a href="/Estudios/Edit/@estudio.IdProf/@estudio.CcPer" class="btn btn-primary">Editar</a>
+                    <a href="/Estudios/Delete/@estudio.IdProf/@estudio.CcPer" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Estudios/Create" class="btn btn-success">Agregar Estudio</a>

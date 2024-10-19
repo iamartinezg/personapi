@@ -117,8 +117,12 @@ public partial class MasterContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("oper");
 
+            // Configuración de la relación con la entidad Persona
+            entity.HasOne(d => d.Persona)
+                .WithMany(p => p.Telefonos)
+                .HasForeignKey(d => d.Duenio)
+                .HasConstraintName("fk_telefono_persona");
         });
-
         OnModelCreatingPartial(modelBuilder);
     }
 

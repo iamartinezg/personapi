@@ -1,0 +1,28 @@
+﻿@model personapi_dotnet.Models.Entities.Estudios
+
+<h2>Eliminar Estudio</h2>
+
+<div>
+    <h3>¿Estás seguro que quieres eliminar este estudio?</h3>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Id Profesión</dt>
+        <dd class="col-sm-10">@Model.IdProf</dd>
+
+        <dt class="col-sm-2">Cédula Persona</dt>
+        <dd class="col-sm-10">@Model.CcPer</dd>
+
+        <dt class="col-sm-2">Fecha</dt>
+        <dd class="col-sm-10">@Model.Fecha?.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-2">Universidad</dt>
+        <dd class="col-sm-10">@Model.Univer</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="IdProf" />
+        <input type="hidden" asp-for="CcPer" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="/Estudios" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

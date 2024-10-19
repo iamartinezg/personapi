@@ -10,4 +10,7 @@ public partial class Telefono
     public string? Oper { get; set; }
 
     public int? Duenio { get; set; }
+
+    // Relación con la entidad Persona
+    public virtual Persona? Persona { get; set; }
 }
